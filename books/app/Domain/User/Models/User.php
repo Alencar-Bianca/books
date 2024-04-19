@@ -3,9 +3,12 @@
 namespace App\Domain\User\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Domain\Book\Models\Book;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Auth;
 
 class User extends Authenticatable
 {
@@ -21,6 +24,7 @@ class User extends Authenticatable
         'address',
         'active',
         'password',
+        'book_id',
     ];
 
     /**
@@ -44,5 +48,14 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function book(): HasMany
+    {
+        return $this->hasMany(Book::class);
+    }
+
+    public static function signInUser($result) {
+        return Auth::attempt(['name' => $result->name, 'password' => $result->password]);
     }
 }

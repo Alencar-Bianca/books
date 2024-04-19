@@ -105,7 +105,7 @@
 </style>
 </head>
 <body>
-
+    <a href="{{route('logout')}}">logout</a>
 <table>
     <thead>
         <tr>
@@ -126,9 +126,13 @@
             <td>{{ number_format($book->value, 2, '.', ',') }}</td>
             <td>
 
-              <button class="edit-button">Edit</button>
+              <a  class="edit-button" href="{{route('book.edit', ['id' => $book->id])}}">Edit</a>
               <button class="delete-button" onclick="confirmDelete({{$book->id}})">Delete</button>
-              <button class="add-button">Add</button>
+              <form method="POST" action="{{ route('add.id.book', ['id' => $book->id, 'user_id' => Auth::id()]) }}">
+                @csrf
+                <button type="submit" class="add-button">Add</button>
+            </form>
+
             </td>
             </tr>
             @empty

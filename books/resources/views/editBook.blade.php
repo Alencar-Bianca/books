@@ -51,7 +51,6 @@ input[type=number] {
    appearance: textfield;
 
 }
-
   button {
     display: block;
     width: 100%;
@@ -84,24 +83,24 @@ input[type=number] {
         @endforeach
     </ul>
     @endif
-
-    <h2>Book Registration</h2>
     <a href="{{route('logout')}}"><button>logout</button></a>
-    <form id="bookForm" method="POST" action="{{ route('book.create') }}">
+    <h2>Book Edit</h2>
+    <form id="bookForm" method="POST" action="{{ route('book.edit.req',[ 'id' => $book->id]) }}">
       @csrf
       <div class="form-group">
         <label for="nome">Name:</label>
-        <input type="text" id="nome" name="name" >
+        <input type="text" id="nome" name="name" @if($book->name) value="{{$book->name}}" @endif>
       </div>
       <div class="form-group">
-        <label for="ISBN">ISBN:</label>
-        <input type="number" id="ISBN" name="ISBN" >
+        <label for="endereco">ISBN:</label>
+        <input type="number" id="endereco" name="ISBN" @if($book->ISBN) value="{{$book->ISBN}}" @endif>
       </div>
       <div class="form-group">
-        <label for="value">Value:</label>
-        <input type="number" id="value"  name="value" pattern="[0-9]+([,\.][0-9]+)?" min="0" step="any">
+        <label for="endereco" >Value:</label>
+        <input type="number" id="value" class="value" name="value" @if($book->value) value="{{$book->value}}" @endif>
       </div>
-      <button type="button" id="submitButton">Send</button>
+      <button type="button" id="submitButton" onclick="confirmEdit({{ $book->id }})">Send</button>
+
     </form>
 
     @if(session('success'))
@@ -109,29 +108,38 @@ input[type=number] {
     @endif
   </div>
 
-  <script>
-    document.getElementById('submitButton').addEventListener('click', function() {
-      let form = document.getElementById('bookForm');
-      let formData = new FormData(form);
+ <script>
+    function confirmEdit(bookId) {
+     const formData = new FormData(document.getElementById('bookForm'));
 
-      let xhr = new XMLHttpRequest();
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-          if (xhr.status === 200) {
+      formData.append('id', bookId);
 
-            alert('Book registration successful!');
-            window.location.href = "{{ route('login') }}";
-          } else {
-
-            alert('An error occurred during book registration.');
-          }
+      fetch('/book-editar/' + bookId, {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: formData
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
         }
-      };
+        return response.json();
+      })
+      .then(data => {
+        if (data.success) {
+          alert('book updated successfully.');
+        } else {
+          throw new Error('book update failed');
+        }
+      })
+      .catch(error => {
+        console.error('There was an error!', error);
+        alert('An error occurred while updating the book.');
+      });
+    }
 
-      xhr.open('POST', form.getAttribute('action'), true);
-      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-      xhr.send(formData);
-    });
-  </script>
+</script>
 </body>
 </html>

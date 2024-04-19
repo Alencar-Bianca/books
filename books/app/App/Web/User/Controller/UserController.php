@@ -8,9 +8,9 @@ use App\Domain\User\Actions\EditUserAction;
 use App\Domain\User\DataTransferObjects\UserData;
 use App\Domain\User\Models\User;
 use App\Web\User\Request\UserRequest;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
-
-
+use Auth;
 class UserController extends Controller
 {
     public function index(){
@@ -22,7 +22,7 @@ class UserController extends Controller
         $data = UserData::FromRequest($request);
         $action($data);
 
-        return back()->with(['sucess'=> 'User successfully registered']);
+        return redirect()->route('login');
     }
 
     public function show(){
@@ -52,6 +52,36 @@ class UserController extends Controller
 
         $user->update($request->all());
         return response()->json(['success' => true]);
+    }
+
+    public function signIn(Request $request) {
+        $user = User::signInUser($request);
+
+        if (!$user) {
+            return redirect()->route('login')->with('error','Name and/or password incorrect.');
+        }
+
+        if($user) {
+            $user = Auth::user();
+            if ($user->name == null) {
+                Auth::logout();
+                return redirect()->route('login')->with('error','Antes de acessar a sua conta você precisa ativar o seu cadastro clicando no link que enviamos para o seu e-mail.');
+            }
+        }
+        return redirect()->route('book.show');
+    }
+
+    public function login() {
+        return view('login');
+    }
+    public function logout() {
+        Auth::logout();
+        return view('login');
+    }
+    public function addIdBook($id, $user_id) {
+        User::where('id', $user_id)->update(['book_id' => $id]);
+
+        return Redirect::back();
     }
 
 }

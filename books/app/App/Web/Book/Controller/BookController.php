@@ -28,6 +28,25 @@ class BookController extends Controller
 
         return view('showBook', compact('books'));
     }
+
+    public function edit($id){
+        try {
+            $book = Book::findOrFail($id);
+            return view('editBook', compact('book'));
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return redirect()->route('book.index');
+        }
+    }
+    public function editReq(Request $request, $id) {
+        $book = Book::find($id);
+
+        if (!$book) {
+            return response()->json(['error' => 'book not found']);
+        }
+
+        $book->update($request->all());
+        return response()->json(['success' => true]);
+    }
     public function delete($id) {
         $book = Book::findOrFail($id);
         $book->delete();

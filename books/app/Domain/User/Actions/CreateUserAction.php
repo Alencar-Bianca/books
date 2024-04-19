@@ -10,6 +10,7 @@ final class CreateUserAction {
             'address' => $userData->address,
             'password' => $userData->password,
             'active' => $userData->active,
+            'book_id' => $userData->book_id,
         ]);
     }
 }

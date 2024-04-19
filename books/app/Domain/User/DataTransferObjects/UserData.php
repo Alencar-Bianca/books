@@ -16,13 +16,15 @@ class UserData extends DataTransferObject {
     public $active;
 
     public $password;
+    public $book_id;
 
     public static function FromRequest(UserRequest $UserRequest): UserData {
         return new Self([
             'name' => $UserRequest['name'],
             'address' => $UserRequest['address'],
             'password' => $UserRequest['password'],
-            'active' => $UserRequest['active']
+            'active' => $UserRequest['active'],
+            'book_id' => $UserRequest['book_id']
         ]);
     }
 }

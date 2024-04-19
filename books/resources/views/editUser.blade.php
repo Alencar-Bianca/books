@@ -76,6 +76,7 @@ body {
     @endif
 
     <h2>User Edit</h2>
+    <a href="{{route('logout')}}"><button>logout</button></a>
     <form id="userForm" method="POST" action="{{ route('user.edit.req',[ 'id' => $user->id]) }}">
       @csrf
       <div class="form-group">

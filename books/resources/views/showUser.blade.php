@@ -36,6 +36,8 @@
         margin: 2px 2px;
         cursor: pointer;
         border-radius: 5px;
+        width: 72px;
+        height: 32px;
     }
     .delete-button {
         background-color: #f44336;
@@ -63,32 +65,7 @@
         cursor: pointer;
         border-radius: 5px;
     }
-    .added-button {
-        background-color: #555555;
-        border: none;
-        color: white;
-        padding: 8px 16px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 14px;
-        margin: 2px 2px;
-        cursor: pointer;
-        border-radius: 5px;
-    }
-    .remove-button {
-        background-color: #ff9800;
-        border: none;
-        color: white;
-        padding: 8px 16px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 14px;
-        margin: 2px 2px;
-        cursor: pointer;
-        border-radius: 5px;
-    }
+
     a {
         display: inline-block;
         padding: 10px 20px;
@@ -99,14 +76,12 @@
         margin-top: 20px;
     }
 
-    a:hover {
-        background-color: #0056b3;
-    }
 </style>
 </head>
 <body>
 
 <table>
+    <a href="{{route('logout')}}">logout</a>
     <thead>
         <tr>
             <th>ID</th>
@@ -123,7 +98,7 @@
             <td> {{$user->address}}</td>
             <td>
 
-              <button class="edit-button"><a class="edit-button" href="{{route('user.edit', ['id' => $user->id])}}">Edit</a></button>
+              <a  href="{{route('user.edit', ['id' => $user->id])}}">Edit</a>
               <button class="delete-button" onclick="confirmDelete({{$user->id}})">Delete</button>
             </td>
             </tr>
@@ -135,6 +110,7 @@
     </tbody>
 </table>
 <a href="{{route('user.index')}}">Create User</a>
+<a href="{{route('book.index')}}">Create Book</a>
 
 <script>
     function confirmDelete(userId) {

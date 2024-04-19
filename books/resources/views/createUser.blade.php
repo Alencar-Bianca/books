@@ -43,15 +43,15 @@ body {
   }
 
   button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s;
+      display: block;
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s;
   }
 
   button:hover {
@@ -91,6 +91,7 @@ body {
         <input type="password" id="password" class="password" name="password" >
       </div>
       <input type="hidden" id="active" name="active" value="1">
+      <input type="hidden" id="book_id" name="book_id" value="1">
       <button type="button" id="submitButton">Send</button>
     </form>
 
@@ -109,6 +110,7 @@ body {
         if (xhr.readyState === XMLHttpRequest.DONE) {
           if (xhr.status === 200) {
             alert('User registration successful!');
+            window.location.href = "{{ route('user.show') }}";
           } else {
 
             alert('An error occurred during user registration.');
