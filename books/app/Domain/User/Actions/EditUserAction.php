@@ -3,11 +3,13 @@ namespace App\Domain\User\Actions;
 use App\Domain\User\DataTransferObjects\UserData;
 use App\Domain\User\Models\User;
 
-final class CreateUserAction {
+final class EditUserAction {
     public function __invoke(UserData $userData): User {
-        return UserData::create([
+
+        return UserData::update([
             'name' =>  $userData->name,
             'address' => $userData->address,
+            'password' => $userData->password,
             'active' => $userData->active,
         ]);
     }

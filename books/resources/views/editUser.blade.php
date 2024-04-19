@@ -75,23 +75,24 @@ body {
     </ul>
     @endif
 
-    <h2>User Registration</h2>
-    <form id="userForm" method="POST" action="{{ route('user.create') }}">
+    <h2>User Edit</h2>
+    <form id="userForm" method="POST" action="{{ route('user.edit.req',[ 'id' => $user->id]) }}">
       @csrf
       <div class="form-group">
         <label for="nome">Name:</label>
-        <input type="text" id="nome" name="name" >
+        <input type="text" id="nome" name="name" @if($user->name) value="{{$user->name}}" @endif>
       </div>
       <div class="form-group">
         <label for="endereco">Address:</label>
-        <input type="text" id="endereco" name="address" >
+        <input type="text" id="endereco" name="address" @if($user->address) value="{{$user->address}}" @endif>
       </div>
       <div class="form-group">
-        <label for="endereco">Password:</label>
-        <input type="password" id="password" class="password" name="password" >
+        <label for="endereco" >Password:</label>
+        <input type="password" id="password" class="password" name="password" @if($user->password) value="{{$user->password}}" @endif>
       </div>
-      <input type="hidden" id="active" name="active" value="1">
-      <button type="button" id="submitButton">Send</button>
+      <input type="hidden" id="id" name="id" value="{{$user->password}}">
+      <button type="button" id="submitButton" onclick="confirmEdit({{ $user->id }})">Send</button>
+
     </form>
 
     @if(session('success'))
@@ -99,27 +100,38 @@ body {
     @endif
   </div>
 
-  <script>
-    document.getElementById('submitButton').addEventListener('click', function() {
-      let form = document.getElementById('userForm');
-      let formData = new FormData(form);
+ <script>
+    function confirmEdit(userId) {
+     const formData = new FormData(document.getElementById('userForm'));
 
-      let xhr = new XMLHttpRequest();
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-          if (xhr.status === 200) {
-            alert('User registration successful!');
-          } else {
+      formData.append('id', userId);
 
-            alert('An error occurred during user registration.');
-          }
+      fetch('/user-editar/' + userId, {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: formData
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
         }
-      };
+        return response.json();
+      })
+      .then(data => {
+        if (data.success) {
+          alert('User updated successfully.');
+        } else {
+          throw new Error('User update failed');
+        }
+      })
+      .catch(error => {
+        console.error('There was an error!', error);
+        alert('An error occurred while updating the user.');
+      });
+    }
 
-      xhr.open('POST', form.getAttribute('action'), true);
-      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-      xhr.send(formData);
-    });
-  </script>
+</script>
 </body>
 </html>

@@ -35,12 +35,22 @@ body {
     font-weight: bold;
   }
 
-  input[type="text"], input[type="password"] {
+  input[type="text"], input[type="number"] {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
   }
+
+  input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+
+}
+input[type=number] {
+   -moz-appearance: textfield;
+   appearance: textfield;
+
+}
 
   button {
     display: block;
@@ -75,22 +85,21 @@ body {
     </ul>
     @endif
 
-    <h2>User Registration</h2>
-    <form id="userForm" method="POST" action="{{ route('user.create') }}">
+    <h2>Book Registration</h2>
+    <form id="bookForm" method="POST" action="{{ route('book.create') }}">
       @csrf
       <div class="form-group">
         <label for="nome">Name:</label>
         <input type="text" id="nome" name="name" >
       </div>
       <div class="form-group">
-        <label for="endereco">Address:</label>
-        <input type="text" id="endereco" name="address" >
+        <label for="ISBN">ISBN:</label>
+        <input type="number" id="ISBN" name="ISBN" >
       </div>
       <div class="form-group">
-        <label for="endereco">Password:</label>
-        <input type="password" id="password" class="password" name="password" >
+        <label for="value">Value:</label>
+        <input type="number" id="value"  name="value" pattern="[0-9]+([,\.][0-9]+)?" min="0" step="any">
       </div>
-      <input type="hidden" id="active" name="active" value="1">
       <button type="button" id="submitButton">Send</button>
     </form>
 
@@ -101,17 +110,18 @@ body {
 
   <script>
     document.getElementById('submitButton').addEventListener('click', function() {
-      let form = document.getElementById('userForm');
+      let form = document.getElementById('bookForm');
       let formData = new FormData(form);
 
       let xhr = new XMLHttpRequest();
       xhr.onreadystatechange = function() {
         if (xhr.readyState === XMLHttpRequest.DONE) {
           if (xhr.status === 200) {
-            alert('User registration successful!');
+
+            alert('Book registration successful!');
           } else {
 
-            alert('An error occurred during user registration.');
+            alert('An error occurred during book registration.');
           }
         }
       };

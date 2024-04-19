@@ -2,9 +2,9 @@
 
 namespace App\Domain\User\DataTransferObjects;
 
-use Spatie\DataTransferObject\DataTransferObjects;
-
-class UserData extends DataTransferObjects {
+use Spatie\DataTransferObject\DataTransferObject;
+use App\Web\User\Request\UserRequest;
+class UserData extends DataTransferObject {
 
     /** @var string */
     public $name;
@@ -15,10 +15,13 @@ class UserData extends DataTransferObjects {
     /** @var string */
     public $active;
 
+    public $password;
+
     public static function FromRequest(UserRequest $UserRequest): UserData {
         return new Self([
             'name' => $UserRequest['name'],
             'address' => $UserRequest['address'],
+            'password' => $UserRequest['password'],
             'active' => $UserRequest['active']
         ]);
     }

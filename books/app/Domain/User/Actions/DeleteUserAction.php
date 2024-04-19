@@ -8,6 +8,7 @@ final class CreateUserAction {
         return UserData::create([
             'name' =>  $userData->name,
             'address' => $userData->address,
+            'password' => $userData->password,
             'active' => $userData->active,
         ]);
     }

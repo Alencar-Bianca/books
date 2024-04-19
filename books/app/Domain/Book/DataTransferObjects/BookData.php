@@ -2,9 +2,10 @@
 
 namespace App\Domain\Book\DataTransferObjects;
 
-use Spatie\DataTransferObject\DataTransferObjects;
-
-class BookData extends DataTransferObjects {
+use Spatie\DataTransferObject\DataTransferObject;
+use App\Web\Book\Request\BookRequest;
+use App\Domain\Book\Models\Book;
+class BookData extends DataTransferObject {
 
     /** @var string */
     public $name;
@@ -12,7 +13,7 @@ class BookData extends DataTransferObjects {
     /** @var int */
     public $ISBN;
 
-    /** @var double */
+    /** @var numeric */
     public $value;
 
     public static function FromRequest(BookRequest $bookRequest): BookData {

@@ -5,9 +5,10 @@ use App\Domain\User\Models\User;
 
 final class CreateUserAction {
     public function __invoke(UserData $userData): User {
-        return UserData::create([
+        return User::create([
             'name' =>  $userData->name,
             'address' => $userData->address,
+            'password' => $userData->password,
             'active' => $userData->active,
         ]);
     }
